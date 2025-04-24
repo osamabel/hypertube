@@ -1,12 +1,17 @@
 // app/api/placeholder/[width]/[height]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
+import { use } from 'react';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { width: string; height: string } }
+  {params}: {params: Promise<{ width: string; height: string }>}
 ) {
-  const width = parseInt(params.width, 10);
-  const height = parseInt(params.height, 10);
+  const { width, height } = use(params);
+  
+  const widthInt = parseInt(width, 10);
+  const heightInt = parseInt(height, 10);
+
+  
   
   // Generate a simple SVG placeholder with movie-like gradient
   const svg = `
@@ -18,7 +23,7 @@ export async function GET(
         </linearGradient>
       </defs>
       <rect width="${width}" height="${height}" fill="url(#grad)"/>
-      <text x="50%" y="50%" font-family="Arial" font-size="${Math.max(width, height) / 10}px" fill="white" text-anchor="middle" dominant-baseline="middle">Movie</text>
+      <text x="50%" y="50%" font-family="Arial" font-size="${Math.max(widthInt, heightInt) / 10}px" fill="white" text-anchor="middle" dominant-baseline="middle">Movie</text>
     </svg>
   `;
   

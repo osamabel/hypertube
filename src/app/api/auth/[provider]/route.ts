@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { use } from 'react';
 
 // Config for OAuth providers
 const oauthConfig = {
@@ -30,10 +31,10 @@ const oauthConfig = {
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { provider: string } }
+  {params}: {params: Promise<{ provider: string }>}
 ) {
-  const provider = params.provider;
-  
+  const { provider } = use(params);
+
   if (!['google', 'intra42', 'facebook'].includes(provider)) {
     return NextResponse.json({ error: 'Invalid provider' }, { status: 400 });
   }

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { use } from 'react';
 
 // Function to exchange authorization code for access token
 async function getAccessToken(provider: string, code: string, redirectUri: string) {
@@ -68,9 +69,9 @@ async function getUserProfile(provider: string, accessToken: string) {
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { provider: string } }
+  {params}: {params: Promise<{ provider: string }>}
 ) {
-  const provider = params.provider;
+  const { provider } = use(params);
   const searchParams = request.nextUrl.searchParams;
   const code = searchParams.get('code');
   const state = searchParams.get('state');
